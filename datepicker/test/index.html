@@ -23,11 +23,11 @@
     .ui-calendar dd ul{position: relative;}
     .ui-calendar dd ul li{margin: 10px 0;}
     .ui-calendar dd ul li:nth-of-type(1){border-top: 1px solid #ccc;padding: 5px;border-bottom: 1px solid #ccc;}
-    .ui-calendar dd ul span{float: left;width: 14.28%;height: 20px;line-height: 20px;}
+    .ui-calendar dd ul span{float: left;width: 14.28%;height: 20px;line-height: 20px;cursor: pointer;}
 
     .ui-calendar dd ul .msg{position: absolute;top: 21px;left: 50%;margin-left: -75px;width: 150px;height: 30px;line-height: 30px;background: rgba(0,0,0,.6);color: #fff;}
-    .ui-calendar dd ul .act:hover{background: #73C8A9;color: #fff;cursor: pointer;}
-    .ui-calendar dd ul .disabled{color: #bbb}
+    .ui-calendar dd ul .act:hover{background: #73C8A9;color: #fff;}
+    .ui-calendar dd ul .disabled{color: #bbb;cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -55,7 +55,7 @@
                             <span>七</span>
                         </li>
                         <li class="msg" ms-if="msg">{{msg}}</li>
-                        <li class="do-fn-cl"><span ms-repeat="dateList" ms-click="getDate(el)" ms-class="{act: el, disabled: el.disabled}">{{el.day}}</span></li>
+                        <li class="do-fn-cl"><span ms-repeat="dateList" ms-click="getDate(el)" ms-class="{act: el && !el.disabled, disabled: el.disabled}">{{el.day}}</span></li>
                     </ul>
                 </dd>
             </dl>
@@ -67,8 +67,9 @@
             var now = new Date()
             var curMonth = now.getMonth() + 1
             var curYear = now.getFullYear()
-            var minDate = Date.now() - 366 * 24 * 3600 * 1000,
-                maxDate = Date.now() + 366 * 24 * 3600 * 1000
+            var curDay = now.getDate()
+            var minDate = Date.now() - 40 * 60 * 60 * 24 * 1000,
+                maxDate = Date.now() + 10 * 60 * 60 * 24 * 1000
 
 
             var date = av.define({
@@ -115,16 +116,19 @@
                         }
                     }
 
-                    var time = new Date(year + '-' + month).getTime()
-                    if((time < date.minDate || time > date.maxDate) && (year < date.opts.miny || month < date.opts.minm || year > date.opts.maxy || month > date.opts.maxm))
+                    var time = new Date(year + '-' + month, curDay).getTime()
+
+                    if((time < date.minDate || time > date.maxDate) || (year < date.opts.miny || month < date.opts.minm || year > date.opts.maxy || month > date.opts.maxm))
                         return date.msg = '超过日期限制'
                     month = fullNum(month)
                     date.curYear = year
                     date.curMonth = month
                 },
                 getDate: function(v){
-                    v = fullNum(v)
-                    date.dateVal = date.curYear + '-' + date.curMonth + '-' + v.day
+                    if(v && !v.disabled){
+                        v = fullNum(v)
+                        date.dateVal = date.curYear + '-' + date.curMonth + '-' + v.day
+                    }
                     // date.isShow = !1
                 }
             })
@@ -152,9 +156,10 @@
                 var firstDay = getDay(y, m)
                 firstDay = firstDay == 0 ? 7 : firstDay
                 for(var i = 1 - firstDay;i < getMonth(y, m);i++){
+                    var time = new Date(y, m - 1, i + 1).getTime()
                     date.dateList.push({
                         day: i >= 0 ? i + 1 : '',
-                        disabled: date.curYear == date.opts.miny ? (date.curMonth == date.opts.minm ? (i < date.opts.mind && true) : false) : false
+                        disabled: date.curYear >= date.opts.miny ? (date.curMonth >= date.opts.minm ? (time <= minDate || time >= maxDate ? true : false) : true) : true
                     })
                 }
             }
