@@ -7,23 +7,23 @@
 
 'use strict'
 
-define(['avalon','css!../pages/pages'],function(av){
-    av.component('ms:pages', {
+define(['avalon', 'text!./pages.htm', 'css!./pages'],function(av, tpl){
+    av.component('ui:pages', {
         $replace: true,
-        $template: '<div class="do-fn-cl do-fn-noselect ui-pages" ms-class="{{skin}}" ms-if="total > 1"><span ms-if="curr > 1" ms-click="jump(1)" class="first">首页</span><span ms-if="curr > 1" ms-click="jump(curr - 1)">«</span><span ms-if="curr - Math.floor(max /2) > 1 && total > max">...</span><span ms-repeat="pages" ms-click="jump(el)" ms-class="{active: curr == el}">{{el}}</span><span ms-if="total - curr > Math.floor(max /2) && total > max">...</span><span ms-if="curr < total" ms-click="jump(curr + 1)">»</span><span ms-if="curr < total" ms-click="jump(total)" class="last">未页</span><input type="text" ms-if="showGo" class="txt" ms-duplex="currIndex" /><span class="jump" href="javascript:;" ms-if="showGo" ms-click="jump(currIndex)">跳转</span><span class="msg" ms-if="msg">{{msg}}</span></div>',
+        $template: tpl,
         skin: 'blue',
         pages: [],
-        total: '',
+        total: 0,
         curr: 1,
         currIndex: 1,
         max: 5,
-        skin: 'blue',
-        callback: av.noop,
-        jump: av.noop,
-        showGo: false,
+        showJumpBtn: false,
+        $callback: av.noop,
+        $jump: av.noop,
+        $onSuccess: av.noop,
         msg: '',
         $init: function(vm, ele){
-            vm.jump = function(curr){
+            vm.$jump = function(curr){
                 if(curr >> 0 === vm.curr >> 0)
                     return
 
@@ -39,11 +39,14 @@ define(['avalon','css!../pages/pages'],function(av){
                 }
                 vm.pages = calculate(vm, curr)
                 vm.curr = curr
-                vm.callback && vm.callback(curr)
+                vm.$callback && vm.$callback(curr)
             }
             vm.$watch('total',function(val, old){
                 vm.pages = calculate(vm, 1)
             })
+        },
+        $ready: function(vm){
+            vm.$onSuccess(vm)
         }
 
     })

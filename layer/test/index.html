@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>component</title>
+	<link rel="stylesheet" type="text/css" href="../../css/base.min.css">
+	<style type="text/css">
+		a{text-decoration: none;}
+		.btn{display: inline-block;border: 1px solid #999;padding: 5px;margin: 5px;border-radius: 2px;color: #4CAF50;}
+	</style>
+</head>
+<body>
+	<div ms-controller="index">
+		<a href="javascript:;" class="btn" ms-click="alert">alert</a>
+		<a href="javascript:;" class="btn" ms-click="confirm">confirm</a>
+		<a href="javascript:;" class="btn" ms-click="loading">loading</a>
+		<ui:layer identifier="layer" config="opts"></ui:layer>
+	</div>
+	<script type="text/javascript" src="../../lib/avalon.min.js"></script>
+	<script type="text/javascript">
+		require(['avalon','../layer/layer'],function(av){
+			var layer
+			var index = 0
+			var Index = av.define({
+				$id: 'index',
+				init: function(){
+
+				},
+				alert: function(){
+					index++
+					layer.alert("<div>" + index + "</div>",{
+						title: 'alert',
+						callback: function(){}
+					})
+				},
+				confirm: function(){
+					layer.confirm('<div>hello</div>',{
+						title: 'confirm',
+						yes: function(){
+
+						},
+						no: function(){
+
+						}
+					})
+				},
+				loading: function(){
+					layer.loading()
+				},
+				opts: {
+					// icon: '&#xe6a4;',
+					$onSuccess: function(vm){
+						layer = vm
+					}
+				}
+			})
+
+
+
+			av.scan()
+			Index.init()
+		})
+	</script>
+</body>

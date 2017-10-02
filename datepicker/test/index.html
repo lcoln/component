@@ -4,184 +4,36 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Examples</title>
+<title>datepicker</title>
 <meta name="description" content="">
 <meta name="keywords" content="">
 <link href="../../css/base.min.css" rel="stylesheet">
 <style>
     *:focus{outline: none;}
     body{padding: 10px;}
-    a{text-decoration: none;}
-    .ui-calendar{}
-    .ui-calendar .date-input{border: 1px solid #ccc;height: 30px;padding-left: 10px;border-radius: 3px;}
-    .ui-calendar dl{width: 230px;text-align: center;padding: 15px;padding-bottom: 0;border: 1px solid #ccc;box-shadow: 0 0 2px #ccc;font-size: 13px;color: #666}
-    .ui-calendar dt{padding: 5px;background: rgba(0,0,0,.1);}
-    .ui-calendar dd{}
-    .ui-calendar dd nav{font-size: 14px;margin: 10px;}
-    .ui-calendar dd nav a{float: left;width: 17%;color: #3FB8AF;}
-    .ui-calendar dd nav span{float: left;width: 32%;}
-    .ui-calendar dd ul{position: relative;}
-    .ui-calendar dd ul li{margin: 10px 0;}
-    .ui-calendar dd ul li:nth-of-type(1){border-top: 1px solid #ccc;padding: 5px;border-bottom: 1px solid #ccc;}
-    .ui-calendar dd ul span{float: left;width: 14.28%;height: 20px;line-height: 20px;cursor: pointer;}
-
-    .ui-calendar dd ul .msg{position: absolute;top: 21px;left: 50%;margin-left: -75px;width: 150px;height: 30px;line-height: 30px;background: rgba(0,0,0,.6);color: #fff;}
-    .ui-calendar dd ul .act:hover{background: #73C8A9;color: #fff;}
-    .ui-calendar dd ul .disabled{color: #bbb;cursor:not-allowed}
+    .datepicker{float: left;margin: 0 10px;}
+    .title{float: left;}
 </style>
 </head>
 <body>
-    <div ms-controller="date" class="ui-calendar">
-        <div>
-            <input type="text" name="" ms-on-focus="show" ms-click="caculateDate" class="date-input" ms-duplex="dateVal" />
-            <dl ms-if="isShow" ms-click="keepShow">
-                <dt>请选择日期</dt>
-                <dd>
-                    <nav class="do-fn-cl">
-                        <a href="javascript:;" ms-click="jump(1, -1)"><<</a>
-                        <a href="javascript:;" ms-click="jump(2, -1)"><</a>
-                        <span>{{curYear}} - {{curMonth}}</span>
-                        <a href="javascript:;" ms-click="jump(2, 1)">></a>
-                        <a href="javascript:;" ms-click="jump(1, 1)">>></a>
-                    </nav>
-                    <ul>
-                        <li class="do-fn-cl">
-                            <span>一</span>
-                            <span>二</span>
-                            <span>三</span>
-                            <span>四</span>
-                            <span>五</span>
-                            <span>六</span>
-                            <span>七</span>
-                        </li>
-                        <li class="msg" ms-if="msg">{{msg}}</li>
-                        <li class="do-fn-cl"><span ms-repeat="dateList" ms-click="getDate(el)" ms-class="{act: el && !el.disabled, disabled: el.disabled}">{{el.day}}</span></li>
-                    </ul>
-                </dd>
-            </dl>
-        </div>
+    <div ms-controller="index">
+        <span class="title">datepicker:</span>
+        <ui:datepicker class="datepicker" identifier="indexDatepicker" config="datepickerOpts"></ui:datepicker>
+        <ui:datepicker class="datepicker" identifier="indexDatepicker1" config="datepickerOpts"></ui:datepicker>
     </div>
     <script type="text/javascript" src="../../lib/avalon.min.js"></script>
     <script type="text/javascript">
-        require(['avalon'],function(av){
-            var now = new Date()
-            var curMonth = now.getMonth() + 1
-            var curYear = now.getFullYear()
-            var curDay = now.getDate()
-            var minDate = Date.now() - 40 * 60 * 60 * 24 * 1000,
-                maxDate = Date.now() + 10 * 60 * 60 * 24 * 1000
+        require(['avalon', '../datepicker/datepicker'],function(av){
 
-
-            var date = av.define({
-                $id: 'date',
-                curYear: curYear,
-                curMonth: curMonth < 10 ? '0' + curMonth : curMonth,
-                dateList: [],
-                isShow: false,
-                dateVal: '',
-                minDate: minDate,
-                maxDate: maxDate,
-                msg: '',
-                opts: {
-                    maxy: maxDate && av.filters.date(maxDate, 'Y'),
-                    miny: minDate && av.filters.date(minDate, 'Y'),
-                    maxm: maxDate && av.filters.date(maxDate, 'm'),
-                    minm: minDate && av.filters.date(minDate, 'm'),
-                    maxd: maxDate && av.filters.date(maxDate, 'd'),
-                    mind: minDate && av.filters.date(minDate, 'd'),
-                },
-                show: function(ev){
-                    date.isShow = !0
-                },
-                keepShow: function(ev){
-                    ev.stopPropagation && ev.stopPropagation() || (ev.cancelBubble = true)
-                },
-                caculateDate: function(ev){
-                    ev.stopPropagation()
-                },
-                jump: function(type, step){
-                    var year = date.curYear >> 0,
-                        month = date.curMonth >> 0
-
-                    if(type == 1){
-                        year += step
-                    }else if(type == 2){
-                        month += step
-                        if(month < 1){
-                            year -= 1
-                            month = 12
-                        }else if(month > 12){
-                            year += 1
-                            month = 1
-                        }
+            var Index = av.define({
+                $id: 'index',
+                datepickerOpts: {
+                    minDate: Date.now() - 10 * 60 * 60 * 24 * 1000,
+                    maxDate: Date.now() + 15 * 60 * 60 * 24 * 1000,
+                    $onSuccess: function(vm){
+                        av.log(vm)
                     }
-
-                    var time = new Date(year + '-' + month, curDay).getTime()
-
-                    if((time < date.minDate || time > date.maxDate) || (year < date.opts.miny || month < date.opts.minm || year > date.opts.maxy || month > date.opts.maxm))
-                        return date.msg = '超过日期限制'
-                    month = fullNum(month)
-                    date.curYear = year
-                    date.curMonth = month
-                },
-                getDate: function(v){
-                    if(v && !v.disabled){
-                        v = fullNum(v)
-                        date.dateVal = date.curYear + '-' + date.curMonth + '-' + v.day
-                    }
-                    // date.isShow = !1
                 }
-            })
-
-            function fullNum(num){
-                if(num < 10)
-                    return '0' + num
-
-                return num
-            }
-
-            //获取当月天数
-            function getMonth(y, m){
-                return new Date(y, m, 0).getDate()
-            }
-
-            //获取当月第一天是星期几
-            function getDay(y, m){
-                return new Date(y, m - 1, 1).getDay()
-            }
-
-            //计算当月日历
-            function calculate(y, m){
-                date.dateList = []
-                var firstDay = getDay(y, m)
-                firstDay = firstDay == 0 ? 7 : firstDay
-                for(var i = 1 - firstDay;i < getMonth(y, m);i++){
-                    var time = new Date(y, m - 1, i + 1).getTime()
-                    date.dateList.push({
-                        day: i >= 0 ? i + 1 : '',
-                        disabled: date.curYear >= date.opts.miny ? (date.curMonth >= date.opts.minm ? (time <= minDate || time >= maxDate ? true : false) : true) : true
-                    })
-                }
-            }
-
-            calculate(date.curYear, date.curMonth)
-
-            document.addEventListener('click', function(){
-                date.isShow = !1
-            })
-
-            date.$watch('curYear',function(v){
-                calculate(v, date.curMonth)
-            })
-
-            date.$watch('curMonth',function(v){
-                calculate(date.curYear, v)
-            })
-
-            date.$watch('msg',function(v){
-                setTimeout(function(){
-                    date.msg = ''
-                },1000)
             })
 
             av.scan()

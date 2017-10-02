@@ -1,40 +1,44 @@
 'use strict'
 
-define(['avalon','css!./alertui'],function(av){
+define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 	var layer
 	var offset
 
-	av.component('ms:alert',{
+	av.component('ui:layer',{
 		$replace: true,
-		title: '',
+		title: '提示',
 		html: '',
 		type: 4,
 		layerId: '',
 		$callback: {},
+		icon: '&#xe6af;',
 		yes: av.noop,
 		close: av.noop,
-		$template: '<div><div id="layer" class="do-ui-layer" ms-visible="type <= 2"><span class="do-ui-layer-title do-fn-noselect">{{title}}<a class="do-ui-layer-close iconfont" href="javascript:;" ms-click="close">✗</a></span><div class="do-ui-layer-content do-fn-noselect" id="layer-content" ms-html="html"></div><div class="do-ui-layer-group-btn do-fn-noselect" ms-visible="type == 2"><a href="javascript:;" class="do-ui-layer-btn do-ui-layer-yes" ms-click="yes">确定</a><a href="javascript:;" class="do-ui-layer-btn do-ui-layer-no" ms-click="close">取消</a></div></div><div class="do-ui-layer-shade" ms-visible="type <= 3"></div><div ms-visible="type == 3" class="do-ui-layer-loading"><span class="point point1"></span><span class="point point2"></span><span class="point point3"></span><span class="point point4"></span><span class="point point5"></span></div><div>',
+		$onSuccess: av.noop,
+		$template: tpl,
 		$construct: function(opts, config, other){
 			var vm = av.mix(config, other)
 			return av.mix(opts, vm)
 		},
 		$init: function(vm, ele){
-			vm.alert = function(html,callback){
+			vm.alert = function(html,opt){
 				vm.type = 1
 				vm.html = html
-				vm.$callback['no'] = callback ? callback : null
+				vm.$callback['no'] = opt.callback ? opt.callback : av.noop
+				vm.title = opt.title ? opt.title : '提示'
 			}
 
-			vm.confirm = function(html,yes,no){
+			vm.confirm = function(html,opt){
 				vm.type = 2
 				vm.html = html
-				vm.$callback['yes'] = yes ? yes : null
-				vm.$callback['no'] = no ? no : null
+				vm.$callback['yes'] = opt.yes ? opt.yes : av.noop
+				vm.$callback['no'] = opt.no ? opt.no : av.noop
+				vm.title = opt.title ? opt.title : '提示'
 			}
 
-			vm.loading = function(callback){
+			vm.loading = function(opt){
 				vm.type = 3
-				vm.$callback.callback = callback
+				vm.$callback.callback = opt && opt.callback ? opt.callback : av.noop
 			}
 
 			vm.close = function(ev){
@@ -49,7 +53,7 @@ define(['avalon','css!./alertui'],function(av){
 
 			vm.yes = function(){
 				vm.$callback['yes'] && vm.$callback['yes']()
-				vm.$callback['yes'] = null
+				vm.$callback['yes'] = av.noop
 			}
 
 
@@ -78,6 +82,9 @@ define(['avalon','css!./alertui'],function(av){
 			}
 
 
+		},
+		$ready: function(vm){
+			vm.$onSuccess(vm)
 		}
 	})
 
