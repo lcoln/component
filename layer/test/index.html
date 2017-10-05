@@ -13,6 +13,7 @@
 	<div ms-controller="index">
 		<a href="javascript:;" class="btn" ms-click="alert">alert</a>
 		<a href="javascript:;" class="btn" ms-click="confirm">confirm</a>
+		<a href="javascript:;" class="btn" ms-click="prompt">prompt</a>
 		<a href="javascript:;" class="btn" ms-click="loading">loading</a>
 		<ui:layer identifier="layer" config="opts"></ui:layer>
 	</div>
@@ -36,6 +37,17 @@
 				confirm: function(){
 					layer.confirm('<div>hello</div>',{
 						title: 'confirm',
+						yes: function(){
+
+						},
+						no: function(){
+
+						}
+					})
+				},
+				prompt: function(){
+					layer.prompt('<div>hello</div>',{
+						title: 'prompt',
 						yes: function(){
 
 						},

@@ -15,6 +15,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+*{outline: none;}
+
 .ms-controller,.ms-important,[ms-controller],[ms-important]{visibility: hidden;}
 
 .ui-layer{position: fixed;left: 0;top: 0;width: auto;height: auto;margin: auto;background: #fff;z-index: 9999;box-shadow: 0 0 10px #afadad;}
@@ -24,6 +26,7 @@
 
 .ui-layer .ui-layer-title{display: block;height: 40px;line-height: 40px;padding: 0 10px;width: 100%;border-bottom: 1px solid #eee;background: #f8f8f8;color: #333;}
 .ui-layer .ui-layer-title:hover{cursor: move}
+.ui-layer .ui-layer-drag:hover{cursor: move}
 .ui-layer .ui-layer-section{margin: 10px 0;overflow: hidden;}
 .ui-layer .ui-layer-close{float: right;top: 10px;height: 20px;width: 20px;line-height: 20px;margin: 10px 0;color: #2e8ded;text-align: center;transition: .4s;}
 .ui-layer .ui-layer-close:hover{color: #66b0fb;}
@@ -32,6 +35,8 @@
 .ui-layer .ui-layer-btn{display: inline-block;width: 60px;height: 30px;border: 1px solid #dedede;margin: 0 5px;border-radius: 2px;line-height: 28px;text-align: center;}
 .ui-layer .ui-layer-yes{border-color: #4898d5;background: #2e8ded;color: #fff;}
 .ui-layer .ui-layer-no{background: #f1f1f1;color: #333;}
+
+.ui-layer .prompt-val{height: 30px;border: 1px solid #ddd;min-width: 200px;padding: 0 10px;margin: 10px;color: #666;font-size: 14px;}
 
 .ui-layer-shade{position: fixed;width: 100%;height: 100%;top: 0;left: 0;background: rgba(0, 0, 0, 0.5);z-index: 9998;}
 

@@ -8,10 +8,11 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 		$replace: true,
 		title: '提示',
 		html: '',
-		type: 4,
+		type: 5,
 		layerId: '',
 		$callback: {},
 		icon: '&#xe6af;',
+		promptVal: '',
 		yes: av.noop,
 		close: av.noop,
 		$onSuccess: av.noop,
@@ -36,8 +37,16 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 				vm.title = opt.title ? opt.title : '提示'
 			}
 
-			vm.loading = function(opt){
+			vm.prompt = function(html, opt){
 				vm.type = 3
+				vm.html = html
+				vm.$callback['yes'] = opt.yes ? opt.yes : av.noop
+				vm.$callback['no'] = opt.no ? opt.no : av.noop
+				vm.title = opt.title ? opt.title : '提示'
+			}
+
+			vm.loading = function(opt){
+				vm.type = 4
 				vm.$callback.callback = opt && opt.callback ? opt.callback : av.noop
 			}
 
@@ -48,7 +57,7 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 					delete vm.$callback['no']
 				}
 				vm.$callback = {}
-				vm.type = 4
+				vm.type = 5
 			}
 
 			vm.yes = function(){
@@ -58,27 +67,13 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 
 
 			vm.$watch('type',function(t){
-				if(t <= 2)
-					getLayerPosition()
+				if(t <= 3)
+					getLayerPosition(vm)
 			})
 
 
 			window.onresize = function(){
-				getLayerPosition()
-			}
-
-			function getLayerPosition(){
-				av.nextTick(function(){
-					var vw,vh,x,y
-					layer = document.getElementById('layer')
-					if(vm.type <= 2){
-						vw = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth
-						vh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight
-						x = (vw - layer.offsetWidth) / 2
-						y = (vh - layer.offsetHeight) / 2
-					}
-					layer.style.transform = 'translate(' + x + 'px,' + y + 'px)'
-				})
+				getLayerPosition(vm)
 			}
 
 
@@ -98,10 +93,42 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 		}
 	}
 
-	document.addEventListener('mousedown',function(ev){
+	function getLayerPosition(vm){
+		av.nextTick(function(){
+			var vw,vh,x,y
+			layer = document.getElementById('layer')
+			if(vm.type <= 3){
+				vw = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth
+				vh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight
+				x = (vw - layer.offsetWidth) / 2
+				y = (vh - layer.offsetHeight) / 2
+			}
+			layer.style.transform = 'translate(' + x + 'px,' + y + 'px)'
+		})
+	}
+
+	var listen = (function(dom, event, fn, capture){
+		if(window.addEventListener){
+			return function(){
+				dom.addEventListener(event, function(ev){
+					fn.call(dom, ev)
+				}, capture)
+			}
+		}else if(window.attachEvent){
+			return function(){
+				dom.attachEvent('on' + event, function(ev){
+					fn.call(dom, ev)
+				})
+			}
+		}else{
+			dom['on' + event] = fn
+		}
+	})()
+
+	listen(document, 'mousedown',function(ev){
 		if(ev.type != 'contextmenu'){
 			layer = ev.target.offsetParent
-			if(layer && /do-ui-layer-title/.test(ev.target.className)){
+			if(layer && /ui-layer-drag/.test(ev.target.className)){
 				offset = layer.style.transform.replace(/[^\d,.]/g,'').split(',')
 				av(layer).data('ox',ev.pageX)
 				av(layer).data('oy',ev.pageY)
@@ -110,12 +137,12 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 		}
 	})
 
-	document.addEventListener('mouseup',function(){
+	listen(document, 'mouseup',function(){
 		document.removeEventListener('mousemove',move)
 		offset = layer = null
 	})
 
-	document.addEventListener('contextmenu',function(){
+	listen(document, 'contextmenu',function(){
 		document.removeEventListener('mousemove',move)
 		offset = layer = null
 	})
