@@ -17,11 +17,23 @@
                     func.apply(dom, e)
                 }, capture)
             }
-        }else if(window.attachEvent){
+        }else if(window.det){
             return function(dom, event, func, capture){
                 dom.attachEvent("on" + event, function(e){
                     func.apply(dom, e)
                 })
+            }
+        }
+    })()
+
+    var remove = (function(){
+        if(window.removeEventListener){
+            return function(dom, event, func){
+                dom.removeEventListener(event, func, false)
+            }
+        }else if(window.detachEvent){
+            return function(dom, event, func){
+                dom.detachEvent("on" + event, func)
             }
         }
     })()
@@ -36,32 +48,41 @@
         return false
     }
 
-    var scroll = function(callback){
-        listen(window, "scroll", throttle(scrollCallBack, callback, 500, 1000), false)
+    var scroll = function(dom, callback, time, deadLine){
+        listen(dom, "scroll", throttle(scrollCallBack, dom, callback, time, deadLine), false)
     }
 
-    function throttle(func, callback, time, mustRun){
+    scroll.removeEvent = function(dom){
+        remove(dom, "scroll", throttle)
+    }
+
+    function throttle(func, dom, callback, time, deadLine){
         var timeout = null,
             args = [].slice.call(arguments, 1),
-            context = this
+            context = this,
+            now = new　Date()
 
         return function() {
 
             clearTimeout(timeout);
+            var curTime = new Date()
             // 如果达到了规定的触发时间间隔，触发 handler
-            func.apply(context, args);
+            timeout = setTimeout(function(){
+                func.apply(context, args);
+            }, time)
         }
     }
 
-    function scrollCallBack(callback){
-        clientHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+    function scrollCallBack(dom, callback){
+        clientHeight = dom.clientHeight || dom.offsetHeight || window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
         if(getUserAgent() === 'Firefox')
-            bodyHeight = document.documentElement.scrollHeight
+            bodyHeight = dom.scrollHeight || domdocument.documentElement.scrollHeight
         else
-            bodyHeight = document.body.scrollHeight
-        console.log(getUserAgent());
-        scrollTop = document.body.scrollTop || document.documentElement.scrollTop
-        if(scrollTop + clientHeight === bodyHeight){
+            bodyHeight = dom.scrollHeight || document.body.scrollHeight
+
+        scrollTop = dom.scrollTop || document.body.scrollTop || document.documentElement.scrollTop
+
+        if(scrollTop + clientHeight >= bodyHeight){
             callback && callback()
         }
     }

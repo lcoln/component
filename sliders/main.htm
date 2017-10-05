@@ -1,0 +1,63 @@
+<div class="do-sliders" ms-class="{{skin}}">
+    <div class="slider-content" ms-class="{'h-80': preview, 'h-100': !preview}" ms-if="sliderList.length" ms-mouseenter="$stopSlide()" ms-mouseleave="$startSlide()">
+        <a class="iconfont slider-btn" href="javascript:;"
+            ms-click="$go(-1)">&#xe697;</a>
+
+        <div class="container">
+            <div class="box"
+                ms-if="sliderType == 1"
+                ms-css="{width: sliderList.length * 100 + '%', transform: animation}">
+                <a  target="_blank"
+                    ms-repeat="sliderList"
+                    ms-css="{width: currWidth}"
+                    ms-attr="{href: el.link || 'javascript:;'}">
+                    <img ms-if="el.src && el.src != ''" ms-attr-src="el.src">
+                    <div class="default-elm" ms-class="{elm: !el.elm && !el.src, 'preview-act': curr === $index ||  (curr >= maxNum && $index == maxNum - 1)}" ms-if="!el.src" :html="el.elm ? el.elm : ''"></div>
+                    <p ms-if="el.title"
+                        ms-html="el.title"
+                        class="title-class"></p>
+                </a>
+            </div>
+            <div class="box"
+                ms-if="sliderType == 2">
+                <a  target="_blank"
+                    class="fadeType"
+                    ms-repeat="sliderList"
+                    ms-css="{opacity: curr != $index ? 0 : 1}"
+                    ms-attr="{href: el.link || 'javascript:;'}">
+                    <img ms-if="el.src && el.src != ''" :attr-src="el.src">
+                    <div class="default-elm" ms-class="{elm: !el.elm && !el.src, 'preview-act': curr === $index ||  (curr >= maxNum && $index == maxNum - 1)}" ms-if="!el.src" :html="el.elm ? el.elm : ''"></div>
+                    <p ms-if="el.title"
+                        ms-html="el.title"
+                        class="title-class"></p>
+                </a>
+            </div>
+        </div>
+
+        <a class="iconfont slider-btn" href="javascript:;"
+            ms-click="$go(1)">&#xe6a7;</a>
+    </div>
+
+
+    <div class="slider-preview-btn"
+        ms-css="{bottom: preview ? '-5%' : '15%'}" >
+        <span ms-if="!preview"
+            href="javascript:;"
+            ms-class="{'no-preview-act': curr === $index}"
+            ms-repeat="sliderList"
+            ms-click="$jump($index)">
+        </span>
+
+        <a class="btn-img" href="javascript:;"
+            ms-if="preview"
+            ms-class="{act: curr === $index || (curr >= maxNum && $index == maxNum - 1)}"
+            ms-click="$jump($index)"
+            ms-repeat="sliderBtnList">
+            <img
+                ms-class="{'preview-act': curr === $index ||  (curr >= maxNum && $index == maxNum - 1)}"
+                ms-if="el.src && el.src != ''"
+                ms-attr-src="el.src" />
+            <div class="btn-background"></div>
+        </a>
+    </div>
+</div>

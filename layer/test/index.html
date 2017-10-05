@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>component</title>
+	<title>layer</title>
 	<link rel="stylesheet" type="text/css" href="../../css/base.min.css">
 	<style type="text/css">
 		a{text-decoration: none;}
@@ -29,14 +29,16 @@
 				},
 				alert: function(){
 					index++
-					layer.alert("<div>" + index + "</div>",{
+					layer.alert("<div>Internal Server Error</div>",{
 						title: 'alert',
+						icon: 2,
 						callback: function(){}
 					})
 				},
 				confirm: function(){
-					layer.confirm('<div>hello</div>',{
+					layer.confirm('<div>是否确定进行该操作</div>',{
 						title: 'confirm',
+						icon: 3,
 						yes: function(){
 
 						},
@@ -46,10 +48,11 @@
 					})
 				},
 				prompt: function(){
-					layer.prompt('<div>hello</div>',{
+					layer.prompt('<div>Are you a boy or a girl ?</div>',{
 						title: 'prompt',
-						yes: function(){
-
+						icon: 4,
+						yes: function(res){
+							console.log(res);
 						},
 						no: function(){
 
@@ -60,7 +63,6 @@
 					layer.loading()
 				},
 				opts: {
-					// icon: '&#xe6a4;',
 					$onSuccess: function(vm){
 						layer = vm
 					}

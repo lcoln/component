@@ -1,8 +1,17 @@
 'use strict'
 
 define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
-	var layer
-	var offset
+	var layer = null,
+		offset = [],
+		icon = {
+			1: '&#xe6af;',		//笑脸
+			2: '&#xe69c;',		//哭脸
+			3: '&#xe6a4;',		//感叹号
+			4: '&#xe6a3;',		//问号
+			5: '&#xe6a0;',		//星星
+			6: '&#xe6b1;'		//成功
+		}
+
 
 	av.component('ui:layer',{
 		$replace: true,
@@ -11,7 +20,7 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 		type: 5,
 		layerId: '',
 		$callback: {},
-		icon: '&#xe6af;',
+		icon: '',
 		promptVal: '',
 		yes: av.noop,
 		close: av.noop,
@@ -27,6 +36,7 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 				vm.html = html
 				vm.$callback['no'] = opt.callback ? opt.callback : av.noop
 				vm.title = opt.title ? opt.title : '提示'
+				vm.icon = opt.icon ? icon[opt.icon] : ''
 			}
 
 			vm.confirm = function(html,opt){
@@ -35,6 +45,7 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 				vm.$callback['yes'] = opt.yes ? opt.yes : av.noop
 				vm.$callback['no'] = opt.no ? opt.no : av.noop
 				vm.title = opt.title ? opt.title : '提示'
+				vm.icon = opt.icon ? icon[opt.icon] : ''
 			}
 
 			vm.prompt = function(html, opt){
@@ -43,6 +54,7 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 				vm.$callback['yes'] = opt.yes ? opt.yes : av.noop
 				vm.$callback['no'] = opt.no ? opt.no : av.noop
 				vm.title = opt.title ? opt.title : '提示'
+				vm.icon = opt.icon ? icon[opt.icon] : ''
 			}
 
 			vm.loading = function(opt){
@@ -52,6 +64,9 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 
 			vm.close = function(ev){
 				vm.html = ''
+				vm.title = '提示'
+				vm.icon = '&#xe6af;'
+				vm.promptVal = ''
 				if(vm.$callback['no']){
 					vm.$callback['no']()
 					delete vm.$callback['no']
@@ -60,9 +75,12 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 				vm.type = 5
 			}
 
-			vm.yes = function(){
-				vm.$callback['yes'] && vm.$callback['yes']()
-				vm.$callback['yes'] = av.noop
+			vm.yes = function(obj){
+				if(vm.$callback['yes']){
+					if(vm.promptVal){
+						vm.$callback['yes'](vm.promptVal)
+					}
+				}
 			}
 
 
@@ -107,15 +125,15 @@ define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
 		})
 	}
 
-	var listen = (function(dom, event, fn, capture){
+	var listen = (function(){
 		if(window.addEventListener){
-			return function(){
+			return function(dom, event, fn, capture){
 				dom.addEventListener(event, function(ev){
 					fn.call(dom, ev)
 				}, capture)
 			}
 		}else if(window.attachEvent){
-			return function(){
+			return function(dom, event, fn, capture){
 				dom.attachEvent('on' + event, function(ev){
 					fn.call(dom, ev)
 				})

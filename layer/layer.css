@@ -30,7 +30,7 @@
 .ui-layer .ui-layer-section{margin: 10px 0;overflow: hidden;}
 .ui-layer .ui-layer-close{float: right;top: 10px;height: 20px;width: 20px;line-height: 20px;margin: 10px 0;color: #2e8ded;text-align: center;transition: .4s;}
 .ui-layer .ui-layer-close:hover{color: #66b0fb;}
-.ui-layer .ui-layer-content{min-width: 260px;margin: 10px;min-height: 50px;color: #888;}
+.ui-layer .ui-layer-content{min-width: 260px;max-width: 600px;margin: 10px;min-height: 30px;color: #888;}
 .ui-layer .ui-layer-group-btn{margin: 10px;text-align: right;}
 .ui-layer .ui-layer-btn{display: inline-block;width: 60px;height: 30px;border: 1px solid #dedede;margin: 0 5px;border-radius: 2px;line-height: 28px;text-align: center;}
 .ui-layer .ui-layer-yes{border-color: #4898d5;background: #2e8ded;color: #fff;}
