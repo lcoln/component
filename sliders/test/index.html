@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>layer</title>
+	<title>slider</title>
 	<link rel="stylesheet" type="text/css" href="../../css/base.min.css">
 	<style type="text/css">
 		a{text-decoration: none;}
@@ -14,12 +14,6 @@
 	<div class="slider" ms-controller="test">
 	    <ui:slider identifier="sliders" config="sliderOpts"></ui:slider>
 	</div>
-	<!--
-	其中config属性是指定分页组件的配置，会自动从上一层controller里找;
-	其他的属性（除$id, config, id, class, tabindex, style, ms-*属性,data-*属性外，也可以用以配置组件，且优先级最高）;
-	name属性可以设定组件的$id值，方便各模块之间进行通讯
-	-->
-	<!--  引入幻灯片组件  -->
     <script type="text/javascript" src="../../lib/avalon.min.js"></script>
 	<script>
 	    require(['avalon', '../sliders/main'],function(av){
@@ -31,6 +25,7 @@
 	                time: 0,
 	                preview: true,
 	                skin: 'skin-2',
+	                sliderType: 1,
 	                $onSuccess: function(vm){
 	                    slider = vm
 	                    slider.$setSliderList(list)
@@ -38,7 +33,7 @@
 	            }
 	        })
 
-            var list = [{src: '/components/sliders/test/images/2.jpeg', title: 'test1', link: 'http://www.baidu.com', elm: '<div style="width:100%;height: 100%;"></div>'},{src: '/components/sliders/test/images/2.jpeg', title: 'test2', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/1.jpeg', title: 'test1', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/2.jpeg', title: 'test2', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/1.jpeg', title: 'test1', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/2.jpeg', title: 'test2', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/2.jpeg', title: 'test1', link: 'http://www.baidu.com', elm: '<div style="width:100%;height: 100%;"></div>'},{src: '/components/sliders/test/images/2.jpeg', title: 'test2', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/1.jpeg', title: 'test1', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/2.jpeg', title: 'test1', link: 'http://www.baidu.com', elm: '<div style="width:100%;height: 100%;"></div>'},{src: '/components/sliders/test/images/2.jpeg', title: 'test2', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/1.jpeg', title: 'test1', link: 'http://www.baidu.com'}]
+            var list = [{src: '', title: 'test1', link: 'http://www.baidu.com', elm: '<div style="width:100%;height: 100%;"></div>'},{src: '/components/sliders/test/images/2.jpeg', title: 'test2', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/1.jpeg', title: 'test1', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/2.jpeg', title: 'test2', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/1.jpeg', title: 'test1', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/2.jpeg', title: 'test2', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/2.jpeg', title: 'test1', link: 'http://www.baidu.com', elm: '<div style="width:100%;height: 100%;"></div>'},{src: '/components/sliders/test/images/2.jpeg', title: 'test2', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/1.jpeg', title: 'test1', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/2.jpeg', title: 'test1', link: 'http://www.baidu.com', elm: '<div style="width:100%;height: 100%;"></div>'},{src: '/components/sliders/test/images/2.jpeg', title: 'test2', link: 'http://www.baidu.com'},{src: '/components/sliders/test/images/1.jpeg', title: 'test1', link: 'http://www.baidu.com'}]
 
 	        av.scan()
 	    })

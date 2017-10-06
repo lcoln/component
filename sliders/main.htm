@@ -12,7 +12,7 @@
                     ms-css="{width: currWidth}"
                     ms-attr="{href: el.link || 'javascript:;'}">
                     <img ms-if="el.src && el.src != ''" ms-attr-src="el.src">
-                    <div class="default-elm" ms-class="{elm: !el.elm && !el.src, 'preview-act': curr === $index ||  (curr >= maxNum && $index == maxNum - 1)}" ms-if="!el.src" :html="el.elm ? el.elm : ''"></div>
+                    <div class="default-elm" ms-class="{elm: !el.elm && !el.src, 'preview-act': curr === $index ||  (curr >= maxNum && $index == maxNum - 1)}" ms-if="!el.src" ms-html="el.elm ? el.elm : ''"></div>
                     <p ms-if="el.title"
                         ms-html="el.title"
                         class="title-class"></p>
@@ -25,8 +25,8 @@
                     ms-repeat="sliderList"
                     ms-css="{opacity: curr != $index ? 0 : 1}"
                     ms-attr="{href: el.link || 'javascript:;'}">
-                    <img ms-if="el.src && el.src != ''" :attr-src="el.src">
-                    <div class="default-elm" ms-class="{elm: !el.elm && !el.src, 'preview-act': curr === $index ||  (curr >= maxNum && $index == maxNum - 1)}" ms-if="!el.src" :html="el.elm ? el.elm : ''"></div>
+                    <img ms-if="el.src && el.src != ''" ms-attr-src="el.src">
+                    <div class="default-elm" ms-class="{elm: !el.elm && !el.src, 'preview-act': curr === $index ||  (curr >= maxNum && $index == maxNum - 1)}" ms-if="!el.src" ms-html="el.elm ? el.elm : ''"></div>
                     <p ms-if="el.title"
                         ms-html="el.title"
                         class="title-class"></p>
@@ -50,14 +50,14 @@
 
         <a class="btn-img" href="javascript:;"
             ms-if="preview"
-            ms-class="{act: curr === $index || (curr >= maxNum && $index == maxNum - 1)}"
+            ms-class="{act: curr === $index || (curr >= maxNum && $index == maxNum - 1), 'default-btn': !el.src}"
             ms-click="$jump($index)"
             ms-repeat="sliderBtnList">
             <img
                 ms-class="{'preview-act': curr === $index ||  (curr >= maxNum && $index == maxNum - 1)}"
                 ms-if="el.src && el.src != ''"
                 ms-attr-src="el.src" />
-            <div class="btn-background"></div>
+            <div class="btn-background" ms-if="el.src"></div>
         </a>
     </div>
 </div>

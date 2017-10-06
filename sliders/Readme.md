@@ -9,11 +9,11 @@
         time: int,     //轮播间隔时间
         preview: boolean   //是否缩略有图
         skin: 'skin-2',     //4种,默认0(0,1,2,3)
+        sliderType: 1,      //幻灯片动画效果,目前有1: 滑动;2: 渐进渐出
         $onSuccess: function(vm){
             slider = vm
         },           //初始化回调
         vm.$setSliderList(list),         //赋值数据给幻灯片数组
-        vm.$setSliderType(type)         //type改变幻灯片动画效果,目前有1: 滑动;2: 渐进渐出
     }
 
 ```

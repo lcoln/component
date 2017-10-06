@@ -86,11 +86,6 @@ define(["avalon", "text!./main.htm", "css!./main"], function(av, tpl){
                 vm.sliderList.pushArray(list)
             }
 
-            vm.$setSliderType = function(type){
-                vm.sliderType = type
-                av.log(vm.sliderType)
-            }
-
             vm.$watch('curr', function(val, old) {
                 vm.currWidth = getWidth()
                 var width
@@ -112,7 +107,6 @@ define(["avalon", "text!./main.htm", "css!./main"], function(av, tpl){
 
                 vm.animation = 'translate(' + (-width * vm.curr) + 'px, 0)'
                 if(vm.preview && vm.maxNum < vm.sliderList.length){
-                    av.log(vm.maxNum , vm.sliderList.length)
                     vm.sliderBtnList.removeAll()
                     vm.sliderBtnList.pushArray(getBtnList(vm))
                 }
@@ -139,7 +133,6 @@ define(["avalon", "text!./main.htm", "css!./main"], function(av, tpl){
                 vm.sliderBtnList.removeAll()
                 vm.sliderBtnList.pushArray(getBtnList(vm))
             }
-            av.log(vm)
         },
         currWidth: 0,
         animation: '',
@@ -157,7 +150,6 @@ define(["avalon", "text!./main.htm", "css!./main"], function(av, tpl){
 
         $onSuccess: av.noop,
         $setSliderList: av.noop,
-        $setSliderType: av.noop,
         $jump: av.noop,
         $stopSlide: av.noop,
         $startSlide: av.noop,
