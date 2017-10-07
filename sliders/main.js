@@ -8,16 +8,18 @@
 define(["avalon", "text!./main.htm", "css!./main"], function(av, tpl){
 
     var dom;
-    function getWidth(){}
+    var sliderNum = 0;
 
     /**
      * [根据当前幻灯片索引获取填充底下按钮数据]
      * @param  {Object} vm [vm对象]
      * @return {[Array]}    [填充到按钮的数据]
      */
-    function getBtnList(vm){
-        var currWidth = vm.currWidth.slice(0, -2)
-        vm.maxNum = Math.floor(currWidth / 130)
+    function getBtnList(vm, el){
+        if(el){
+            dom = el
+        }
+        vm.maxNum = Math.floor(dom.offsetWidth / 90)
         var curr = vm.curr + 1
         let res = []
         if(!vm.preview)
@@ -44,8 +46,10 @@ define(["avalon", "text!./main.htm", "css!./main"], function(av, tpl){
         vm.timer = setTimeout(function(){
             vm.$go(1)
             autoSlide(vm)
-        }, vm.time)
+        }, vm.time <= 0 ? 3000 : vm.time)
     }
+
+
 
     av.component('ui:slider', {
         $replace: true,
@@ -86,53 +90,40 @@ define(["avalon", "text!./main.htm", "css!./main"], function(av, tpl){
                 vm.sliderList.pushArray(list)
             }
 
-            vm.$watch('curr', function(val, old) {
-                vm.currWidth = getWidth()
-                var width
-                if(vm.currWidth.indexOf('px') > -1)
-                    width = vm.currWidth.slice(0, vm.currWidth.indexOf('px'))
-
-                vm.animation = 'translate(' + (-width * val) + 'px, 0)'
-                if(vm.preview && vm.maxNum < vm.sliderList.length){
-                    vm.sliderBtnList.removeAll()
-                    vm.sliderBtnList.pushArray(getBtnList(vm))
-                }
-            })
-
-            window.addEventListener('resize', function(){
-                vm.currWidth = getWidth()
-                var width
-                if(vm.currWidth.indexOf('px') > -1)
-                    width = vm.currWidth.slice(0, vm.currWidth.indexOf('px'))
-
-                vm.animation = 'translate(' + (-width * vm.curr) + 'px, 0)'
-                if(vm.preview && vm.maxNum < vm.sliderList.length){
-                    vm.sliderBtnList.removeAll()
-                    vm.sliderBtnList.pushArray(getBtnList(vm))
-                }
-            }, false)
-
             vm.$onSuccess(vm)
         },
-        $ready: function(vm){
-            dom = document.querySelector('.do-sliders')
+        $ready: function(vm, el){
 
-            /**
-             * [获取当前幻灯片元素宽度]
-             */
-            getWidth = function(){
-
-                return window.getComputedStyle ? window.getComputedStyle(dom).width : dom.offsetWidth + 'px'
-            }
-
-            vm.currWidth = getWidth()
+            vm.currWidth = (100 / vm.sliderList.length)
             if(vm.autoSlide)
                 autoSlide(vm)
 
             if(vm.preview){
                 vm.sliderBtnList.removeAll()
-                vm.sliderBtnList.pushArray(getBtnList(vm))
+                vm.sliderBtnList.pushArray(getBtnList(vm, el))
             }
+
+            if(vm.fullScreen){
+                vm.fullScreen = 'fullscreen'
+            }
+
+            vm.$watch('curr', function(val, old) {
+
+                vm.animation = vm.sliderType > 2 ? 'translate(0, ' + (-vm.currWidth * val) + '%)' : 'translate(' + (-vm.currWidth * val) + '%, 0)'
+                if(vm.preview && vm.maxNum < vm.sliderList.length){
+                    vm.sliderBtnList.removeAll()
+                    vm.sliderBtnList.pushArray(getBtnList(vm, el))
+                }
+            })
+
+            window.addEventListener('resize', function(){
+
+                vm.animation = vm.sliderType > 2 ? 'translate(0, ' + (-vm.currWidth * vm.curr) + '%)' : 'translate(' + (-vm.currWidth * vm.curr) + '%, 0)'
+                if(vm.preview && vm.maxNum < vm.sliderList.length){
+                    vm.sliderBtnList.removeAll()
+                    vm.sliderBtnList.pushArray(getBtnList(vm, el))
+                }
+            }, false)
         },
         currWidth: 0,
         animation: '',
@@ -145,8 +136,9 @@ define(["avalon", "text!./main.htm", "css!./main"], function(av, tpl){
         sliderList: [],
         autoSlide: '',
         time: 3000,
-        preview: true,
+        preview: false,
         skin: 'skin-0',
+        fullScreen: false,
 
         $onSuccess: av.noop,
         $setSliderList: av.noop,
