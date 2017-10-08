@@ -9,6 +9,7 @@ define(["avalon", "text!./main.htm", "css!./main"], function(av, tpl){
 
     var dom;
     var sliderNum = 0;
+    var skin = ['skin-0','skin-1','skin-2','skin-3']
 
     /**
      * [根据当前幻灯片索引获取填充底下按钮数据]
@@ -93,7 +94,7 @@ define(["avalon", "text!./main.htm", "css!./main"], function(av, tpl){
             vm.$onSuccess(vm)
         },
         $ready: function(vm, el){
-
+            vm.skin = skin[vm.skin]
             vm.currWidth = (100 / vm.sliderList.length)
             if(vm.autoSlide)
                 autoSlide(vm)
@@ -124,6 +125,23 @@ define(["avalon", "text!./main.htm", "css!./main"], function(av, tpl){
                     vm.sliderBtnList.pushArray(getBtnList(vm, el))
                 }
             }, false)
+
+            if(vm.sliderType >= 3){
+                var now = 0
+                var mouseWheelEv = /Firefox/i.test(navigator.userAgent) ? "DOMMouseScroll": "mousewheel"
+                var direction = /Firefox/i.test(navigator.userAgent) ? "detail": "deltaY"
+                window.addEventListener(mouseWheelEv, function(ev){
+                    if(Date.now() - now > 500 || now == 0){
+
+                        if(ev[direction] > 0){
+                            vm.$go(1)
+                        }else{
+                            vm.$go(-1)
+                        }
+                        now = Date.now()
+                    }
+                }, false)
+            }
         },
         currWidth: 0,
         animation: '',
@@ -137,7 +155,7 @@ define(["avalon", "text!./main.htm", "css!./main"], function(av, tpl){
         autoSlide: '',
         time: 3000,
         preview: false,
-        skin: 'skin-0',
+        skin: 0,
         fullScreen: false,
 
         $onSuccess: av.noop,

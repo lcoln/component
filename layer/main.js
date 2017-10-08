@@ -1,6 +1,6 @@
 'use strict'
 
-define(['avalon', 'text!./layer.htm', 'css!./layer'],function(av, tpl){
+define(['avalon', 'text!./main.htm', 'css!./main'],function(av, tpl){
 	var layer = null,
 		offset = [],
 		icon = {

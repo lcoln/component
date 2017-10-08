@@ -30,7 +30,7 @@ identifier属性可以设定组件的$id值，方便各模块之间进行通讯
 <!--  引入分页组件  -->
 <script type="text/javascript" src="avalon.min.js"></script>
 <script type="text/javascript">
-    require(['avalon', '../layer/layer'],function(av){
+    require(['avalon', '../layer/main'],function(av){
 
         var Index = av.define({
             $id: 'index',

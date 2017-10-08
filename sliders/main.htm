@@ -8,12 +8,12 @@
                 <div class="box"
                     ms-if="sliderType == 1"
                     ms-css="{width: sliderList.length * 100 + '%', transform: animation}">
-                    <a  target="_blank"
+                    <a class="page"  target="_blank"
                         ms-repeat="sliderList"
                         ms-css="{width: currWidth + '%'}"
                         ms-attr="{href: el.link || 'javascript:;'}">
                         <img ms-if="el.src && el.src != ''" ms-attr-src="el.src">
-                        <div class="default-elm" ms-class="{elm: !el.elm && !el.src, 'preview-act': curr === $index ||  (curr >= maxNum && $index == maxNum - 1)}" ms-if="!el.src" ms-html="el.elm ? el.elm : ''"></div>
+
                         <p ms-if="el.title"
                             ms-html="el.title"
                             class="title-class"></p>
@@ -21,13 +21,13 @@
                 </div>
                 <div class="box"
                     ms-if="sliderType == 2">
-                    <a  target="_blank"
-                        class="fadeType"
+                    <a target="_blank"
+                        class="page fadeType"
                         ms-repeat="sliderList"
                         ms-css="{opacity: curr != $index ? 0 : 1}"
                         ms-attr="{href: el.link || 'javascript:;'}">
                         <img ms-if="el.src && el.src != ''" ms-attr-src="el.src">
-                        <div class="default-elm" ms-class="{elm: !el.elm && !el.src, 'preview-act': curr === $index ||  (curr >= maxNum && $index == maxNum - 1)}" ms-if="!el.src" ms-html="el.elm ? el.elm : ''"></div>
+
                         <p ms-if="el.title"
                             ms-html="el.title"
                             class="title-class"></p>
@@ -36,12 +36,25 @@
                 <div class="box"
                     ms-if="sliderType == 3"
                     ms-css="{height: sliderList.length * 100 + '%', transform: animation}">
-                    <a  target="_blank"
+                    <a class="page" target="_blank"
                         ms-repeat="sliderList"
                         ms-css="{width: '100%', height: (100 / sliderList.length) + '%'}"
                         ms-attr="{href: el.link || 'javascript:;'}">
                         <img ms-if="el.src && el.src != ''" ms-attr-src="el.src">
-                        <div class="default-elm" ms-class="{elm: !el.elm && !el.src, 'preview-act': curr === $index ||  (curr >= maxNum && $index == maxNum - 1)}" ms-if="el.elm" ms-html="el.elm ? el.elm : ''"></div>
+                        <p ms-if="el.title"
+                            ms-html="el.title"
+                            class="title-class"></p>
+                    </a>
+                </div>
+                <div class="box"
+                    ms-if="sliderType == 4">
+                    <a target="_blank"
+                        class="page fadeType"
+                        ms-repeat="sliderList"
+                        ms-css="{opacity: curr != $index ? 0 : 1}"
+                        ms-attr="{href: el.link || 'javascript:;'}">
+                        <img ms-if="el.src && el.src != ''" ms-attr-src="el.src">
+                        {{el.elm | html}}
                         <p ms-if="el.title"
                             ms-html="el.title"
                             class="title-class"></p>
@@ -55,7 +68,7 @@
 
 
         <div class="slider-preview-btn"
-            ms-class="{'slider-preview-btn-vertical': sliderType == 3}"
+            ms-class="{'slider-preview-btn-vertical': sliderType > 2}"
             ms-css="{padding: !preview && sliderType < 3 ? '2%' : ''}" >
             <span ms-if="!preview || fullScreen"
                 href="javascript:;"

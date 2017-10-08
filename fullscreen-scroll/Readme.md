@@ -28,7 +28,7 @@
 <!--  
 其中config属性是指定分页组件的配置，会自动从上一层controller里找;
 其他的属性（除$id, config, id, class, tabindex, style, ms-*属性,data-*属性外，也可以用以配置组件，且优先级最高）;
-identifier属性可以设定组件的$id值，方便各模块之间进行通讯
+name属性可以设定组件的$id值，方便各模块之间进行通讯
 -->
 <!--  引入幻灯片组件  -->
 <script src="avalon.min.js"></script>
